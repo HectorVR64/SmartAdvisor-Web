@@ -1,14 +1,12 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copia toda la solución o el contenido del directorio raíz configurado
+# Copia toda la solución
 COPY . .
 
-# Restaura las dependencias del proyecto web
-RUN dotnet restore "SmartAdvisor.Web.csproj"
-
-# Publica la aplicación
-RUN dotnet publish "SmartAdvisor.Web.csproj" -c Release -o /app/publish
+# Restaura y publica apuntando a la subcarpeta del proyecto web
+RUN dotnet restore "SmartAdvisor.Web/SmartAdvisor.Web.csproj"
+RUN dotnet publish "SmartAdvisor.Web/SmartAdvisor.Web.csproj" -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
