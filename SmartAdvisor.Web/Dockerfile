@@ -4,13 +4,13 @@ WORKDIR /src
 # Copia toda la solución
 COPY . .
 
-# Restaura y publica apuntando a la subcarpeta del proyecto web
+# Restaura y publica apuntando correctamente a la subcarpeta
 RUN dotnet restore "SmartAdvisor.Web/SmartAdvisor.Web.csproj"
 RUN dotnet publish "SmartAdvisor.Web/SmartAdvisor.Web.csproj" -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
-CPY --from=build /app/publish .
+COPY --from=build /app/publish .
 ENV ASPNETCORE_URLS=http://+:10000
 EXPOSE 10000
 ENTRYPOINT ["dotnet", "SmartAdvisor.Web.dll"]
