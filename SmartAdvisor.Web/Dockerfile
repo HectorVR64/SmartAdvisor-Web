@@ -10,7 +10,7 @@ RUN dotnet publish "SmartAdvisor.Web/SmartAdvisor.Web.csproj" -c Release -o /app
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
-COPY --from=build /app/publish .
+CPY --from=build /app/publish .
 ENV ASPNETCORE_URLS=http://+:10000
 EXPOSE 10000
 ENTRYPOINT ["dotnet", "SmartAdvisor.Web.dll"]
