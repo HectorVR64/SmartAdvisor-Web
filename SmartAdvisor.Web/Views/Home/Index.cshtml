@@ -1,0 +1,115 @@
+@model DashboardVm
+@{
+    ViewData["Title"] = "Dashboard";
+    var a = Model.Resultado.Analisis;
+    var r = a.Resumen;
+    var maxInteres = a.Intereses.Count == 0 ? 1 : a.Intereses.Max(i => i.Alumnos);
+}
+
+<div class="encabezado">
+    <h1>Dashboard académico</h1>
+    <div class="meta">
+        <span class="chip @(Model.Resultado.Origen == "Azure Function" ? "chip-ok" : "chip-gris")">Procesado por: @Model.Resultado.Origen</span>
+        <a asp-action="Analisis">Ver JSON</a>
+    </div>
+</div>
+
+@if (Model.Resultado.Aviso is string aviso)
+{
+    <div class="aviso mal">@aviso</div>
+}
+
+<section class="kpis">
+    <div class="tarjeta kpi"><span>Total alumnos</span><b>@r.TotalAlumnos</b><small>@r.AlumnosActivos activos · Count()</small></div>
+    <div class="tarjeta kpi"><span>Total materias</span><b>@r.TotalMaterias</b><small>@r.CreditosPlan créditos en el plan · Sum()</small></div>
+    <div class="tarjeta kpi"><span>Total especialidades</span><b>@r.TotalEspecialidades</b><small>@r.TotalCursos cursos · @r.TotalCertificaciones certificaciones</small></div>
+    <div class="tarjeta kpi"><span>Promedio general</span><b>@Fmt.Dec(r.PromedioGeneral)</b><small>mín. @Fmt.Dec(a.EstadisticaPromedios.Min) · máx. @Fmt.Dec(a.EstadisticaPromedios.Max) · Aggregate()</small></div>
+</section>
+
+<section class="dos">
+    <div class="tarjeta">
+        <h2>Alumnos por interés <em>SelectMany + GroupBy</em></h2>
+        @foreach (var i in a.Intereses)
+        {
+            <div class="fila-barra">
+                <span class="etq">@i.Interes</span>
+                <div class="barra"><span style="width:@Fmt.Ancho(i.Alumnos, maxInteres)%"></span></div>
+                <b>@i.Alumnos</b>
+            </div>
+        }
+        @if (a.Intereses.Count == 0) { <p class="vacio">Sin datos.</p> }
+    </div>
+
+    <div class="tarjeta">
+        <h2>Avance y promedio por área <em>Join + GroupBy + Average</em></h2>
+        @foreach (var i in a.PorArea)
+        {
+            <div class="fila-barra">
+                <span class="etq">@i.Area</span>
+                <div class="barra"><span class="azul" style="width:@Fmt.Pct(i.AvancePct)%"></span></div>
+                <b>@Fmt.Dec(i.AvancePct)%</b>
+                <small class="nota">prom. @Fmt.Dec(i.Promedio)</small>
+            </div>
+        }
+        <p class="pie">Avance = materias aprobadas ÷ materias del área × alumnos.</p>
+    </div>
+</section>
+
+<section class="tarjeta">
+    <h2>Recomendaciones por alumno <em>Select + Where + OrderByDescending</em></h2>
+    <table>
+        <thead><tr><th>Alumno</th><th class="num">Promedio</th><th>Avance de créditos</th><th>Recomendación</th><th class="num">Afinidad</th><th>Materias sugeridas</th></tr></thead>
+        <tbody>
+        @foreach (var al in a.Alumnos.OrderByDescending(x => x.Recomendacion.Afinidad).ThenBy(x => x.Nombre))
+        {
+            <tr>
+                <td><a asp-controller="Alumnos" asp-action="Detalle" asp-route-id="@al.AlumnoId">@al.Nombre</a></td>
+                <td class="num">@Fmt.Dec(al.Promedio)</td>
+                <td><div class="fila-barra mini"><div class="barra"><span class="azul" style="width:@Fmt.Pct(al.AvancePct)%"></span></div><b>@Fmt.Dec(al.AvancePct)%</b></div></td>
+                <td><span class="insignia @al.Recomendacion.Estado">@Fmt.Estado(al.Recomendacion.Estado)</span> @al.Recomendacion.Especialidad</td>
+                <td class="num">@Fmt.Dec(al.Recomendacion.Afinidad)</td>
+                <td>@(al.MateriasSugeridas.Count == 0 ? "—" : string.Join(", ", al.MateriasSugeridas.Select(m => m.Nombre)))</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</section>
+
+<section class="dos">
+    <div class="tarjeta">
+        <h2>Mejores promedios <em>OrderByDescending + Take(3)</em></h2>
+        <table>
+            <thead><tr><th>Alumno</th><th class="num">Sem.</th><th class="num">Promedio</th><th>Interés</th></tr></thead>
+            <tbody>
+            @foreach (var m in a.MejoresPromedios)
+            {
+                <tr><td>@m.Nombre</td><td class="num">@m.Semestre</td><td class="num">@Fmt.Dec(m.Promedio)</td><td>@m.InteresPrincipal</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="tarjeta">
+        <h2>Especialidades <em>Count + Any</em></h2>
+        <table>
+            <thead><tr><th>Especialidad</th><th class="num">Mín.</th><th class="num">Interesados</th><th class="num">Recom.</th><th class="num">Cond.</th></tr></thead>
+            <tbody>
+            @foreach (var e in a.Especialidades)
+            {
+                <tr><td>@e.Nombre</td><td class="num">@e.PromedioMinimo.ToString("0.#")</td><td class="num">@e.AlumnosInteresados</td><td class="num">@e.Recomendados</td><td class="num">@e.Condicionados</td></tr>
+            }
+            </tbody>
+        </table>
+        <p class="pie">@r.SinRecomendacion alumno(s) sin recomendación.</p>
+    </div>
+</section>
+
+<section class="tarjeta">
+    <h2>Alumnos por estatus <em>GroupBy</em></h2>
+    <div class="chips">
+        @foreach (var e in a.PorEstatus)
+        {
+            <span class="chip chip-gris">@e.Estatus: <b>@e.Alumnos</b></span>
+        }
+    </div>
+</section>

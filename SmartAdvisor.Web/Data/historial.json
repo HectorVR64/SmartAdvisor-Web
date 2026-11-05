@@ -1,0 +1,12 @@
+[
+  { "id": "HIS-001", "alumnoId": "ALU-001", "materiaId": "MAT-101", "periodo": "2023-1", "calificacion": 96, "estatus": "aprobada" },
+  { "id": "HIS-002", "alumnoId": "ALU-001", "materiaId": "MAT-110", "periodo": "2023-2", "calificacion": 94, "estatus": "aprobada" },
+  { "id": "HIS-003", "alumnoId": "ALU-001", "materiaId": "MAT-205", "periodo": "2024-1", "calificacion": 95, "estatus": "aprobada" },
+  { "id": "HIS-004", "alumnoId": "ALU-001", "materiaId": "MAT-301", "periodo": "2025-1", "calificacion": 92, "estatus": "aprobada" },
+  { "id": "HIS-005", "alumnoId": "ALU-001", "materiaId": "MAT-302", "periodo": "2025-2", "calificacion": 94, "estatus": "aprobada" },
+  { "id": "HIS-006", "alumnoId": "ALU-002", "materiaId": "MAT-101", "periodo": "2024-1", "calificacion": 85, "estatus": "aprobada" },
+  { "id": "HIS-007", "alumnoId": "ALU-002", "materiaId": "MAT-110", "periodo": "2024-2", "calificacion": 80, "estatus": "aprobada" },
+  { "id": "HIS-008", "alumnoId": "ALU-002", "materiaId": "MAT-340", "periodo": "2026-1", "calificacion": null, "estatus": "cursando" },
+  { "id": "HIS-009", "alumnoId": "ALU-003", "materiaId": "MAT-205", "periodo": "2023-2", "calificacion": 80, "estatus": "aprobada" },
+  { "id": "HIS-010", "alumnoId": "ALU-003", "materiaId": "MAT-220", "periodo": "2024-2", "calificacion": 76, "estatus": "aprobada" }
+]

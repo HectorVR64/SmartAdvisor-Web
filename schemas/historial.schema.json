@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smart-academic-advisor/schemas/historial.schema.json",
+  "title": "Historial académico",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "alumnoId", "materiaId", "periodo", "calificacion", "estatus"],
+    "properties": {
+      "id": { "type": "string", "pattern": "^HIS-\\d{3}$" },
+      "alumnoId": { "type": "string", "pattern": "^ALU-\\d{3}$" },
+      "materiaId": { "type": "string", "pattern": "^MAT-\\d{3}$" },
+      "periodo": { "type": "string", "pattern": "^\\d{4}-[12]$" },
+      "calificacion": { "type": ["number", "null"], "minimum": 0, "maximum": 100 },
+      "estatus": { "enum": ["aprobada", "reprobada", "cursando"] }
+    }
+  }
+}

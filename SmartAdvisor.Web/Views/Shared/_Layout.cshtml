@@ -1,0 +1,39 @@
+@{
+    var controlador = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    string Activo(string c) => string.Equals(controlador, c, StringComparison.OrdinalIgnoreCase) ? "activo" : "";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>@ViewData["Title"] - Smart Academic Advisor</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <div class="app">
+        <aside class="lateral">
+            <div class="marca">Smart Academic Advisor<small>Equipo 6 · TESE</small></div>
+            <nav>
+                <a class="@Activo("Home")" asp-controller="Home" asp-action="Index">Dashboard</a>
+                <a class="@Activo("Alumnos")" asp-controller="Alumnos" asp-action="Index">Alumnos</a>
+                <a class="@Activo("Materias")" asp-controller="Materias" asp-action="Index">Materias</a>
+                <a class="@Activo("Especialidades")" asp-controller="Especialidades" asp-action="Index">Especialidades</a>
+            </nav>
+            <div class="pie-lateral">Programación Lógica y Funcional<br />Núcleo funcional · Parcial 2</div>
+        </aside>
+        <main class="contenido">
+            @if (TempData["Mensaje"] is string ok)
+            {
+                <div class="aviso ok">@ok</div>
+            }
+            @if (TempData["Error"] is string mal)
+            {
+                <div class="aviso mal">@mal</div>
+            }
+            @RenderBody()
+        </main>
+    </div>
+</body>
+</html>

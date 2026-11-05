@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smart-academic-advisor/schemas/materia.schema.json",
+  "title": "Materias",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "clave", "nombre", "creditos", "semestre", "area", "tipo", "prerrequisitos"],
+    "properties": {
+      "id": { "type": "string", "pattern": "^MAT-\\d{3}$" },
+      "clave": { "type": "string", "pattern": "^INF-\\d{3}$" },
+      "nombre": { "type": "string", "minLength": 3 },
+      "creditos": { "type": "integer", "minimum": 1 },
+      "semestre": { "type": "integer", "minimum": 1, "maximum": 9 },
+      "area": { "enum": ["IA", "Desarrollo", "Datos", "Redes", "Seguridad"] },
+      "tipo": { "enum": ["obligatoria", "optativa"] },
+      "prerrequisitos": {
+        "type": "array",
+        "uniqueItems": true,
+        "items": { "type": "string", "pattern": "^MAT-\\d{3}$" }
+      }
+    }
+  }
+}

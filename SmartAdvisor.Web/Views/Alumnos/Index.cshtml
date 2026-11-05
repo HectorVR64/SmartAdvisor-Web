@@ -1,0 +1,60 @@
+@model AlumnosIndexVm
+@{
+    ViewData["Title"] = "Alumnos";
+}
+
+<div class="encabezado">
+    <h1>Alumnos</h1>
+    <div class="meta">
+        <span class="chip chip-gris">@Model.Alumnos.Count de @Model.Total alumnos</span>
+        <a class="boton" asp-action="Crear">+ Nuevo alumno</a>
+    </div>
+</div>
+
+<form method="get" class="filtros tarjeta">
+    <label>Buscar<input type="text" name="texto" value="@Model.Texto" placeholder="Nombre o matrícula" /></label>
+    <label>Interés
+        <select name="interes">
+            <option value="">Todos</option>
+            @foreach (var i in Consultas.Areas) { <option value="@i" selected="@(Model.Interes == i)">@i</option> }
+        </select>
+    </label>
+    <label>Estatus
+        <select name="estatus">
+            <option value="">Todos</option>
+            @foreach (var e in Consultas.EstatusAlumno) { <option value="@e" selected="@(Model.Estatus == e)">@e</option> }
+        </select>
+    </label>
+    <button type="submit" class="boton">Filtrar</button>
+    <a href="@Url.Action("Index")" class="boton sec">Limpiar</a>
+    <em class="linq">Where + OrderBy</em>
+</form>
+
+<section class="tarjeta">
+    <table>
+        <thead><tr><th>Matrícula</th><th>Nombre</th><th class="num">Sem.</th><th class="num">Promedio</th><th>Intereses</th><th>Estatus</th><th>Recomendación</th><th></th></tr></thead>
+        <tbody>
+        @foreach (var a in Model.Alumnos)
+        {
+            var rec = Model.Recomendaciones.TryGetValue(a.Id, out var x) ? x : null;
+            <tr>
+                <td>@a.Matricula</td>
+                <td><a asp-action="Detalle" asp-route-id="@a.Id">@a.Nombre</a></td>
+                <td class="num">@a.Semestre</td>
+                <td class="num">@Fmt.Dec(a.Promedio)</td>
+                <td>@foreach (var i in a.Intereses) { <span class="chip">@i</span> }</td>
+                <td>@a.Estatus</td>
+                <td>@if (rec is not null) { <span class="insignia @rec.Estado">@Fmt.Estado(rec.Estado)</span> <small>@rec.Especialidad</small> }</td>
+                <td class="acciones">
+                    <a class="boton sec peq" asp-action="Detalle" asp-route-id="@a.Id">Ver</a>
+                    <a class="boton sec peq" asp-action="Editar" asp-route-id="@a.Id">Editar</a>
+                    <form method="post" asp-action="Eliminar" asp-route-id="@a.Id" onsubmit="return confirm('¿Eliminar este alumno y todo su historial?');">
+                        <button type="submit" class="boton peligro peq">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    @if (Model.Alumnos.Count == 0) { <p class="vacio">No hay alumnos con esos filtros.</p> }
+</section>

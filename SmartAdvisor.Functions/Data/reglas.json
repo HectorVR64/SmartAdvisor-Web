@@ -1,0 +1,42 @@
+[
+  {
+    "id": "REG-001",
+    "nombre": "EspecialidadIA",
+    "condiciones": [
+      { "hecho": "Promedio", "operador": ">=", "valor": 85 },
+      { "hecho": "Interes", "operador": "=", "valor": "IA" }
+    ],
+    "conclusion": { "tipo": "EspecialidadRecomendada", "especialidadId": "ESP-IA" },
+    "peso": 1.0
+  },
+  {
+    "id": "REG-002",
+    "nombre": "EspecialidadDesarrollo",
+    "condiciones": [
+      { "hecho": "Promedio", "operador": ">=", "valor": 75 },
+      { "hecho": "Interes", "operador": "=", "valor": "Desarrollo" }
+    ],
+    "conclusion": { "tipo": "EspecialidadRecomendada", "especialidadId": "ESP-DES" },
+    "peso": 1.0
+  },
+  {
+    "id": "REG-003",
+    "nombre": "EspecialidadDatos",
+    "condiciones": [
+      { "hecho": "Promedio", "operador": ">=", "valor": 80 },
+      { "hecho": "Interes", "operador": "=", "valor": "Datos" }
+    ],
+    "conclusion": { "tipo": "EspecialidadRecomendada", "especialidadId": "ESP-DAT" },
+    "peso": 1.0
+  },
+  {
+    "id": "REG-004",
+    "nombre": "SugerirMateria",
+    "condiciones": [
+      { "hecho": "EspecialidadRecomendada", "operador": "=", "valor": true },
+      { "hecho": "PrerrequisitosCumplidos", "operador": "=", "valor": true }
+    ],
+    "conclusion": { "tipo": "SugerirMateria", "especialidadId": null },
+    "peso": 0.8
+  }
+]

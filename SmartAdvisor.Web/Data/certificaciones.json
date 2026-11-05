@@ -1,0 +1,5 @@
+[
+  { "id": "CER-001", "nombre": "Azure AI Fundamentals (AI-900)", "emisor": "Microsoft", "area": "IA", "nivel": "basico", "costoMXN": 1800 },
+  { "id": "CER-002", "nombre": "Azure Developer Associate (AZ-204)", "emisor": "Microsoft", "area": "Desarrollo", "nivel": "intermedio", "costoMXN": 3600 },
+  { "id": "CER-003", "nombre": "Azure Data Fundamentals (DP-900)", "emisor": "Microsoft", "area": "Datos", "nivel": "basico", "costoMXN": 1800 }
+]

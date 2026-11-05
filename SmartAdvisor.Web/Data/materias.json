@@ -1,0 +1,12 @@
+[
+  { "id": "MAT-101", "clave": "INF-101", "nombre": "Programación Estructurada", "creditos": 5, "semestre": 1, "area": "Desarrollo", "tipo": "obligatoria", "prerrequisitos": [] },
+  { "id": "MAT-110", "clave": "INF-110", "nombre": "Programación Orientada a Objetos", "creditos": 5, "semestre": 2, "area": "Desarrollo", "tipo": "obligatoria", "prerrequisitos": ["MAT-101"] },
+  { "id": "MAT-205", "clave": "INF-205", "nombre": "Probabilidad y Estadística", "creditos": 5, "semestre": 3, "area": "Datos", "tipo": "obligatoria", "prerrequisitos": [] },
+  { "id": "MAT-220", "clave": "INF-220", "nombre": "Bases de Datos", "creditos": 5, "semestre": 4, "area": "Datos", "tipo": "obligatoria", "prerrequisitos": ["MAT-110"] },
+  { "id": "MAT-301", "clave": "INF-301", "nombre": "Inteligencia Artificial", "creditos": 5, "semestre": 5, "area": "IA", "tipo": "obligatoria", "prerrequisitos": ["MAT-205"] },
+  { "id": "MAT-302", "clave": "INF-302", "nombre": "Programación Lógica y Funcional", "creditos": 5, "semestre": 5, "area": "IA", "tipo": "obligatoria", "prerrequisitos": ["MAT-110"] },
+  { "id": "MAT-330", "clave": "INF-330", "nombre": "Minería de Datos", "creditos": 5, "semestre": 6, "area": "Datos", "tipo": "optativa", "prerrequisitos": ["MAT-220"] },
+  { "id": "MAT-340", "clave": "INF-340", "nombre": "Desarrollo Web con .NET", "creditos": 5, "semestre": 5, "area": "Desarrollo", "tipo": "optativa", "prerrequisitos": ["MAT-110"] },
+  { "id": "MAT-401", "clave": "INF-401", "nombre": "Aprendizaje Automático", "creditos": 5, "semestre": 7, "area": "IA", "tipo": "optativa", "prerrequisitos": ["MAT-301"] },
+  { "id": "MAT-402", "clave": "INF-402", "nombre": "Visión Computacional", "creditos": 5, "semestre": 7, "area": "IA", "tipo": "optativa", "prerrequisitos": ["MAT-301"] }
+]

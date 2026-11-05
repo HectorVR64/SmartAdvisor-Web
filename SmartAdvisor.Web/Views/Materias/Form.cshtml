@@ -1,0 +1,37 @@
+@model MateriaForm
+@{
+    ViewData["Title"] = Model.Editando ? "Editar materia" : "Nueva materia";
+}
+
+<div class="encabezado"><h1>@ViewData["Title"]</h1></div>
+
+<form method="post" class="tarjeta formulario" asp-action="@(Model.Editando ? "Editar" : "Crear")" asp-route-id="@(Model.Editando ? Model.Id : null)">
+    <div asp-validation-summary="ModelOnly" class="aviso mal"></div>
+    <div class="rejilla">
+        <label>Clave<input type="text" name="Clave" value="@Model.Clave" required /></label>
+        <label>Nombre<input type="text" name="Nombre" value="@Model.Nombre" required /></label>
+        <label>Créditos<input type="number" name="Creditos" value="@Model.Creditos" min="1" required /></label>
+        <label>Semestre (1 a 9)<input type="number" name="Semestre" value="@Model.Semestre" min="1" max="9" required /></label>
+        <label>Área
+            <select name="Area">
+                @foreach (var i in Consultas.Areas) { <option value="@i" selected="@(Model.Area == i)">@i</option> }
+            </select>
+        </label>
+        <label>Tipo
+            <select name="Tipo">
+                @foreach (var t in Consultas.TiposMateria) { <option value="@t" selected="@(Model.Tipo == t)">@t</option> }
+            </select>
+        </label>
+    </div>
+    <fieldset>
+        <legend>Prerrequisitos</legend>
+        @foreach (var m in Model.Opciones)
+        {
+            <label class="check"><input type="checkbox" name="Prerrequisitos" value="@m.Id" checked="@Model.Prerrequisitos.Contains(m.Id)" /> @m.Clave · @m.Nombre</label>
+        }
+    </fieldset>
+    <div class="botonera">
+        <button type="submit" class="boton">Guardar</button>
+        <a class="boton sec" asp-action="Index">Cancelar</a>
+    </div>
+</form>
