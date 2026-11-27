@@ -1,0 +1,77 @@
+@model DashboardVm
+@{
+    ViewData["Title"] = "Estadísticas";
+    var a = Model.Resultado.Analisis;
+    var r = a.Resumen;
+    var maxInteres = a.Intereses.Count == 0 ? 1 : a.Intereses.Max(i => i.Alumnos);
+}
+
+<div class="encabezado">
+    <div>
+        <h1>Estadísticas</h1>
+        <p class="sub">Lo que calculan las consultas LINQ sobre los datos del grupo.</p>
+    </div>
+    <div class="meta">
+        <span class="chip @(Model.Resultado.Origen == "Azure Function" ? "chip-ok" : "chip-gris")">Procesado por: @Model.Resultado.Origen</span>
+        <a class="boton sec" asp-action="Analisis">Ver JSON</a>
+    </div>
+</div>
+
+<section class="dos">
+    <div class="tarjeta">
+        <h2>Alumnos por interés <em>SelectMany + GroupBy</em></h2>
+        @foreach (var i in a.Intereses)
+        {
+            <div class="fila-barra">
+                <span class="etq">@i.Interes</span>
+                <div class="barra"><span style="width:@Fmt.Ancho(i.Alumnos, maxInteres)%"></span></div>
+                <b>@i.Alumnos</b>
+            </div>
+        }
+        @if (a.Intereses.Count == 0) { <p class="vacio">Sin datos.</p> }
+    </div>
+
+    <div class="tarjeta">
+        <h2>Avance y promedio por área <em>Join + GroupBy + Average</em></h2>
+        @foreach (var i in a.PorArea)
+        {
+            <div class="fila-barra">
+                <span class="etq">@i.Area</span>
+                <div class="barra"><span class="azul" style="width:@Fmt.Pct(i.AvancePct)%"></span></div>
+                <b>@Fmt.Dec(i.AvancePct)%</b>
+                <small class="nota">prom. @Fmt.Dec(i.Promedio)</small>
+            </div>
+        }
+        <p class="pie">Avance = materias aprobadas ÷ materias del área × alumnos.</p>
+    </div>
+</section>
+
+<section class="dos">
+    <div class="tarjeta">
+        <h2>Mejores promedios <em>OrderByDescending + Take(3)</em></h2>
+        <table>
+            <thead><tr><th>Alumno</th><th class="num">Sem.</th><th class="num">Promedio</th><th>Interés</th></tr></thead>
+            <tbody>
+            @foreach (var m in a.MejoresPromedios)
+            {
+                <tr><td>@m.Nombre</td><td class="num">@m.Semestre</td><td class="num">@Fmt.Dec(m.Promedio)</td><td>@m.InteresPrincipal</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="tarjeta">
+        <h2>Especialidades <em>Count + Any</em></h2>
+        <table>
+            <thead><tr><th>Especialidad</th><th class="num">Mín.</th><th class="num">Interesados</th><th class="num">Recom.</th><th class="num">Cond.</th></tr></thead>
+            <tbody>
+            @foreach (var e in a.Especialidades)
+            {
+                <tr><td>@e.Nombre</td><td class="num">@e.PromedioMinimo.ToString("0.#")</td><td class="num">@e.AlumnosInteresados</td><td class="num">@e.Recomendados</td><td class="num">@e.Condicionados</td></tr>
+            }
+            </tbody>
+        </table>
+        <p class="pie">@r.SinRecomendacion alumno(s) sin recomendación.</p>
+    </div>
+</section>
+

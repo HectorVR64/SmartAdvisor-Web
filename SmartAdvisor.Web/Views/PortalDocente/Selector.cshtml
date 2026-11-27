@@ -1,0 +1,27 @@
+@model IReadOnlyList<SmartAdvisor.Core.Models.Docente>
+@{
+    ViewData["Title"] = "Portal del docente";
+}
+
+<div class="encabezado">
+    <div>
+        <h1>Portal del docente</h1>
+        <p class="sub">Elige tu nombre para registrar calificaciones de tus materias.</p>
+    </div>
+</div>
+
+<section class="tarjetas">
+@foreach (var d in Model)
+{
+    <a class="tarjeta acceso" asp-action="Entrar" asp-route-id="@d.Id">
+        <div class="avatar" style="background:#a9c6ff">@Fmt.Iniciales(d.Nombre)</div>
+        <div>
+            <b>@d.Nombre</b>
+            <span class="rol">@d.MateriasIds.Count materias</span>
+        </div>
+        <span class="flecha">Entrar →</span>
+    </a>
+}
+</section>
+@if (Model.Count == 0) { <p class="vacio">No hay docentes registrados (falta docentes.json).</p> }
+<p class="nota">Acceso de demostración: no pide contraseña. Los docentes del ejemplo son ficticios.</p>

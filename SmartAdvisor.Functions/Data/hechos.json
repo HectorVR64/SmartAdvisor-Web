@@ -1,0 +1,305 @@
+{
+  "descripcion": "Base de HECHOS del perfil académico (paradigma lógico). Cada hecho es una cláusula de Horn sin cuerpo: predicado(argumentos). Átomos en minúscula.",
+  "ids": {
+    "ALU-001": "ana",
+    "ALU-002": "luis",
+    "ALU-003": "sofia",
+    "ALU-004": "diego"
+  },
+  "nombres": {
+    "ana": "Ana Torres Ramírez",
+    "luis": "Luis Mendoza Cruz",
+    "sofia": "Sofía Ramírez León",
+    "diego": "Diego Herrera Soto",
+    "mat_101": "Programación Estructurada",
+    "mat_110": "Programación Orientada a Objetos",
+    "mat_205": "Probabilidad y Estadística",
+    "mat_220": "Bases de Datos",
+    "mat_301": "Inteligencia Artificial",
+    "mat_302": "Programación Lógica y Funcional",
+    "mat_330": "Minería de Datos",
+    "mat_340": "Desarrollo Web con .NET",
+    "mat_401": "Aprendizaje Automático",
+    "mat_402": "Visión Computacional",
+    "esp_ia": "Inteligencia Artificial",
+    "esp_des": "Desarrollo de Software",
+    "esp_dat": "Ciencia de Datos"
+  },
+  "hechos": [
+    {
+      "id": "H001",
+      "grupo": "Perfil académico de los alumnos",
+      "hecho": "alumno(ana)"
+    },
+    {
+      "id": "H002",
+      "grupo": "Perfil académico de los alumnos",
+      "hecho": "alumno(luis)"
+    },
+    {
+      "id": "H003",
+      "grupo": "Perfil académico de los alumnos",
+      "hecho": "alumno(sofia)"
+    },
+    {
+      "id": "H004",
+      "grupo": "Perfil académico de los alumnos",
+      "hecho": "alumno(diego)"
+    },
+    {
+      "id": "H005",
+      "grupo": "Perfil académico de los alumnos",
+      "hecho": "promedio(ana, 95)"
+    },
+    {
+      "id": "H006",
+      "grupo": "Perfil académico de los alumnos",
+      "hecho": "promedio(luis, 82.5)"
+    },
+    {
+      "id": "H007",
+      "grupo": "Perfil académico de los alumnos",
+      "hecho": "promedio(sofia, 78)"
+    },
+    {
+      "id": "H008",
+      "grupo": "Perfil académico de los alumnos",
+      "hecho": "promedio(diego, 70.5)"
+    },
+    {
+      "id": "H009",
+      "grupo": "Perfil académico de los alumnos",
+      "hecho": "interes(ana, ia)"
+    },
+    {
+      "id": "H010",
+      "grupo": "Perfil académico de los alumnos",
+      "hecho": "interes(luis, desarrollo)"
+    },
+    {
+      "id": "H011",
+      "grupo": "Perfil académico de los alumnos",
+      "hecho": "interes(luis, datos)"
+    },
+    {
+      "id": "H012",
+      "grupo": "Perfil académico de los alumnos",
+      "hecho": "interes(sofia, datos)"
+    },
+    {
+      "id": "H013",
+      "grupo": "Perfil académico de los alumnos",
+      "hecho": "interes(diego, redes)"
+    },
+    {
+      "id": "H014",
+      "grupo": "Perfil académico de los alumnos",
+      "hecho": "interes(diego, seguridad)"
+    },
+    {
+      "id": "H015",
+      "grupo": "Plan de estudios",
+      "hecho": "area_materia(mat_101, desarrollo)"
+    },
+    {
+      "id": "H016",
+      "grupo": "Plan de estudios",
+      "hecho": "area_materia(mat_110, desarrollo)"
+    },
+    {
+      "id": "H017",
+      "grupo": "Plan de estudios",
+      "hecho": "area_materia(mat_205, datos)"
+    },
+    {
+      "id": "H018",
+      "grupo": "Plan de estudios",
+      "hecho": "area_materia(mat_220, datos)"
+    },
+    {
+      "id": "H019",
+      "grupo": "Plan de estudios",
+      "hecho": "area_materia(mat_301, ia)"
+    },
+    {
+      "id": "H020",
+      "grupo": "Plan de estudios",
+      "hecho": "area_materia(mat_302, ia)"
+    },
+    {
+      "id": "H021",
+      "grupo": "Plan de estudios",
+      "hecho": "area_materia(mat_330, datos)"
+    },
+    {
+      "id": "H022",
+      "grupo": "Plan de estudios",
+      "hecho": "area_materia(mat_340, desarrollo)"
+    },
+    {
+      "id": "H023",
+      "grupo": "Plan de estudios",
+      "hecho": "area_materia(mat_401, ia)"
+    },
+    {
+      "id": "H024",
+      "grupo": "Plan de estudios",
+      "hecho": "area_materia(mat_402, ia)"
+    },
+    {
+      "id": "H025",
+      "grupo": "Plan de estudios",
+      "hecho": "prerrequisito(mat_110, mat_101)"
+    },
+    {
+      "id": "H026",
+      "grupo": "Plan de estudios",
+      "hecho": "prerrequisito(mat_220, mat_110)"
+    },
+    {
+      "id": "H027",
+      "grupo": "Plan de estudios",
+      "hecho": "prerrequisito(mat_301, mat_205)"
+    },
+    {
+      "id": "H028",
+      "grupo": "Plan de estudios",
+      "hecho": "prerrequisito(mat_302, mat_110)"
+    },
+    {
+      "id": "H029",
+      "grupo": "Plan de estudios",
+      "hecho": "prerrequisito(mat_330, mat_220)"
+    },
+    {
+      "id": "H030",
+      "grupo": "Plan de estudios",
+      "hecho": "prerrequisito(mat_340, mat_110)"
+    },
+    {
+      "id": "H031",
+      "grupo": "Plan de estudios",
+      "hecho": "prerrequisito(mat_401, mat_301)"
+    },
+    {
+      "id": "H032",
+      "grupo": "Plan de estudios",
+      "hecho": "prerrequisito(mat_402, mat_301)"
+    },
+    {
+      "id": "H033",
+      "grupo": "Especialidades",
+      "hecho": "area_clave(esp_ia, ia)"
+    },
+    {
+      "id": "H034",
+      "grupo": "Especialidades",
+      "hecho": "area_clave(esp_des, desarrollo)"
+    },
+    {
+      "id": "H035",
+      "grupo": "Especialidades",
+      "hecho": "area_clave(esp_dat, datos)"
+    },
+    {
+      "id": "H036",
+      "grupo": "Especialidades",
+      "hecho": "materia_de(esp_ia, mat_301)"
+    },
+    {
+      "id": "H037",
+      "grupo": "Especialidades",
+      "hecho": "materia_de(esp_ia, mat_302)"
+    },
+    {
+      "id": "H038",
+      "grupo": "Especialidades",
+      "hecho": "materia_de(esp_ia, mat_401)"
+    },
+    {
+      "id": "H039",
+      "grupo": "Especialidades",
+      "hecho": "materia_de(esp_ia, mat_402)"
+    },
+    {
+      "id": "H040",
+      "grupo": "Especialidades",
+      "hecho": "materia_de(esp_des, mat_101)"
+    },
+    {
+      "id": "H041",
+      "grupo": "Especialidades",
+      "hecho": "materia_de(esp_des, mat_110)"
+    },
+    {
+      "id": "H042",
+      "grupo": "Especialidades",
+      "hecho": "materia_de(esp_des, mat_340)"
+    },
+    {
+      "id": "H043",
+      "grupo": "Especialidades",
+      "hecho": "materia_de(esp_dat, mat_205)"
+    },
+    {
+      "id": "H044",
+      "grupo": "Especialidades",
+      "hecho": "materia_de(esp_dat, mat_220)"
+    },
+    {
+      "id": "H045",
+      "grupo": "Especialidades",
+      "hecho": "materia_de(esp_dat, mat_330)"
+    },
+    {
+      "id": "H046",
+      "grupo": "Historial de cada alumno",
+      "hecho": "aprobada(ana, mat_101)"
+    },
+    {
+      "id": "H047",
+      "grupo": "Historial de cada alumno",
+      "hecho": "aprobada(ana, mat_110)"
+    },
+    {
+      "id": "H048",
+      "grupo": "Historial de cada alumno",
+      "hecho": "aprobada(ana, mat_205)"
+    },
+    {
+      "id": "H049",
+      "grupo": "Historial de cada alumno",
+      "hecho": "aprobada(ana, mat_301)"
+    },
+    {
+      "id": "H050",
+      "grupo": "Historial de cada alumno",
+      "hecho": "aprobada(ana, mat_302)"
+    },
+    {
+      "id": "H051",
+      "grupo": "Historial de cada alumno",
+      "hecho": "aprobada(luis, mat_101)"
+    },
+    {
+      "id": "H052",
+      "grupo": "Historial de cada alumno",
+      "hecho": "aprobada(luis, mat_110)"
+    },
+    {
+      "id": "H053",
+      "grupo": "Historial de cada alumno",
+      "hecho": "cursando(luis, mat_340)"
+    },
+    {
+      "id": "H054",
+      "grupo": "Historial de cada alumno",
+      "hecho": "aprobada(sofia, mat_205)"
+    },
+    {
+      "id": "H055",
+      "grupo": "Historial de cada alumno",
+      "hecho": "aprobada(sofia, mat_220)"
+    }
+  ]
+}

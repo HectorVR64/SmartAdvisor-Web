@@ -1,0 +1,26 @@
+@model IReadOnlyList<SmartAdvisor.Core.Models.Alumno>
+@{
+    ViewData["Title"] = "Portal del alumno";
+}
+
+<div class="encabezado">
+    <div>
+        <h1>Portal del alumno</h1>
+        <p class="sub">Elige tu nombre para ver tus calificaciones, tu avance y tu recomendación.</p>
+    </div>
+</div>
+
+<section class="tarjetas">
+@foreach (var a in Model)
+{
+    <a class="tarjeta acceso" asp-action="Entrar" asp-route-id="@a.Id">
+        <div class="avatar">@Fmt.Iniciales(a.Nombre)</div>
+        <div>
+            <b>@a.Nombre</b>
+            <span class="rol">@a.Matricula · semestre @a.Semestre</span>
+        </div>
+        <span class="flecha">Entrar →</span>
+    </a>
+}
+</section>
+<p class="nota">Acceso de demostración: no pide contraseña.</p>

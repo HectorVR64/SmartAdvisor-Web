@@ -1,0 +1,91 @@
+@model PortalDocenteVm
+@{
+    ViewData["Title"] = "Portal del docente";
+}
+
+<div class="encabezado">
+    <div class="persona-cab">
+        <div class="avatar grande" style="background:#a9c6ff">@Fmt.Iniciales(Model.Docente.Nombre)</div>
+        <div>
+            <h1>@Model.Docente.Nombre</h1>
+            <p class="sub">Docente · @Model.Materias.Count materias a tu cargo</p>
+        </div>
+    </div>
+    <div class="meta"><a class="boton sec" asp-action="Salir">Cambiar de docente</a></div>
+</div>
+
+<div class="chips-nav" role="tablist" aria-label="Mis materias">
+    @foreach (var m in Model.Materias)
+    {
+        <a class="chip-link @(m.Id == Model.Actual?.Id ? "on" : "")" asp-action="Index" asp-route-materia="@m.Id">@m.Nombre</a>
+    }
+</div>
+
+@if (Model.Actual is null)
+{
+    <section class="tarjeta"><p class="vacio">No tienes materias asignadas.</p></section>
+}
+else
+{
+    <section class="kpis">
+        <div class="tarjeta kpi"><span>Alumnos en la materia</span><b>@Model.Filas.Count</b><small>@Model.EnCurso en curso · @Model.Aprobados aprobados · @Model.Reprobados reprobados</small></div>
+        <div class="tarjeta kpi"><span>Promedio del grupo</span><b>@Fmt.Dec(Model.Estadistica.Promedio)</b><small>@Model.Estadistica.N calificaciones · Aggregate()</small></div>
+        <div class="tarjeta kpi"><span>Calificación más baja</span><b>@Fmt.Dec(Model.Estadistica.Min)</b><small>mínimo del grupo</small></div>
+        <div class="tarjeta kpi"><span>Calificación más alta</span><b>@Fmt.Dec(Model.Estadistica.Max)</b><small>máximo del grupo</small></div>
+    </section>
+
+    <section class="tarjeta">
+        <h2>@Model.Actual.Nombre <em>@Model.Actual.Clave · semestre @Model.Actual.Semestre</em></h2>
+        @if (Model.Filas.Count == 0)
+        {
+            <p class="vacio">Esta materia todavía no tiene alumnos inscritos. Inscribe uno abajo.</p>
+        }
+        else
+        {
+            <table>
+                <thead><tr><th>Alumno</th><th>Periodo</th><th>Estatus</th><th class="num">Calificación</th><th>Registrar o corregir</th></tr></thead>
+                <tbody>
+                @foreach (var f in Model.Filas)
+                {
+                    <tr>
+                        <td><b>@f.Alumno.Nombre</b><br /><small class="nota">@f.Alumno.Matricula</small></td>
+                        <td>@f.Registro.Periodo</td>
+                        <td><span class="insignia est-@f.Registro.Estatus">@f.Registro.Estatus</span></td>
+                        <td class="num">@if (f.Registro.Calificacion.HasValue) { <span class="nota-chip @Fmt.ClaseNota(f.Registro.Calificacion)">@f.Registro.Calificacion.Value.ToString("0.#")</span> } else { <span class="nota-chip nota-na">—</span> }</td>
+                        <td>
+                            <form method="post" asp-action="Calificar" class="en-linea">
+                                <input type="hidden" name="historialId" value="@f.Registro.Id" />
+                                <input type="hidden" name="materiaId" value="@Model.Actual.Id" />
+                                <input type="number" name="calificacion" min="0" max="100" step="0.5" required placeholder="0 – 100" aria-label="Calificación de @f.Alumno.Nombre" value="@(f.Registro.Calificacion?.ToString("0.#"))" />
+                                <button type="submit" class="boton peq">Guardar</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+            <p class="pie">70 o más: aprobada. Menos de 70: reprobada. Al guardar, el análisis del alumno se recalcula.</p>
+        }
+    </section>
+
+    <section class="tarjeta">
+        <h2>Inscribir un alumno en esta materia</h2>
+        @if (Model.Inscribibles.Count == 0)
+        {
+            <p class="vacio">Todos los alumnos activos ya la tienen aprobada o en curso.</p>
+        }
+        else
+        {
+            <form method="post" asp-action="Inscribir" class="filtros">
+                <input type="hidden" name="materiaId" value="@Model.Actual.Id" />
+                <label>Alumno
+                    <select name="alumnoId">
+                        @foreach (var a in Model.Inscribibles) { <option value="@a.Id">@a.Nombre · @a.Matricula</option> }
+                    </select>
+                </label>
+                <button type="submit" class="boton">Inscribir</button>
+                <em class="linq">Where + All</em>
+            </form>
+        }
+    </section>
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smart-academic-advisor/schemas/certificacion.schema.json",
+  "title": "Certificaciones",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "nombre", "emisor", "area", "nivel", "costoMXN"],
+    "properties": {
+      "id": { "type": "string", "pattern": "^CER-\\d{3}$" },
+      "nombre": { "type": "string", "minLength": 3 },
+      "emisor": { "type": "string", "minLength": 2 },
+      "area": { "enum": ["IA", "Desarrollo", "Datos", "Redes", "Seguridad"] },
+      "nivel": { "enum": ["basico", "intermedio", "avanzado"] },
+      "costoMXN": { "type": "number", "minimum": 0 }
+    }
+  }
+}

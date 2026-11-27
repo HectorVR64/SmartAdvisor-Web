@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SmartAdvisor.Core\SmartAdvisor.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- JSON de ejemplo: se copian a la carpeta de trabajo la primera vez que arranca el sitio -->
+    <Content Update="Data\*.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

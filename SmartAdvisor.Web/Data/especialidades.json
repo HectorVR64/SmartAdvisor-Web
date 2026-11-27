@@ -1,0 +1,32 @@
+[
+  {
+    "id": "ESP-IA",
+    "nombre": "Inteligencia Artificial",
+    "descripcion": "Modelos de aprendizaje, razonamiento y visión computacional.",
+    "promedioMinimo": 85,
+    "areasClave": ["IA"],
+    "materiasIds": ["MAT-301", "MAT-302", "MAT-401", "MAT-402"],
+    "certificacionesIds": ["CER-001"],
+    "cursosIds": ["CUR-001"]
+  },
+  {
+    "id": "ESP-DES",
+    "nombre": "Desarrollo de Software",
+    "descripcion": "Diseño y construcción de aplicaciones web y de escritorio.",
+    "promedioMinimo": 75,
+    "areasClave": ["Desarrollo"],
+    "materiasIds": ["MAT-101", "MAT-110", "MAT-340"],
+    "certificacionesIds": ["CER-002"],
+    "cursosIds": ["CUR-002"]
+  },
+  {
+    "id": "ESP-DAT",
+    "nombre": "Ciencia de Datos",
+    "descripcion": "Análisis, modelado y explotación de grandes volúmenes de datos.",
+    "promedioMinimo": 80,
+    "areasClave": ["Datos"],
+    "materiasIds": ["MAT-205", "MAT-220", "MAT-330"],
+    "certificacionesIds": ["CER-003"],
+    "cursosIds": ["CUR-003"]
+  }
+]

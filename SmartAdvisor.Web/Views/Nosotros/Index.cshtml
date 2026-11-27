@@ -1,0 +1,72 @@
+@{
+    ViewData["Title"] = "Nosotros";
+    var equipo = new[]
+    {
+        (Nombre: "Jean Carlo Pérez González", Rol: "Líder · Arquitectura y modelos", Detalle: "Records inmutables, entrada y salida del análisis y mapa de proyectos.", Color: "#e9c46a"),
+        (Nombre: "Daniel Javier Hernández López", Rol: "Consultas LINQ", Detalle: "Indicadores por área, créditos, estadísticas y materias sugeridas.", Color: "#9be3c0"),
+        (Nombre: "Rosalba Robles Roldán", Rol: "Reglas y recomendación", Detalle: "Reglas como funciones, afinidad y especialidad recomendada.", Color: "#a9c6ff"),
+        (Nombre: "Dana Amelie Sanchez Soto", Rol: "Azure y validaciones", Detalle: "Azure Function, validaciones y restricciones de integridad.", Color: "#f7b7c3"),
+        (Nombre: "Héctor Gabriel Valadez Rivera", Rol: "Pruebas y datos", Detalle: "Las pruebas xUnit y los archivos JSON con sus esquemas.", Color: "#cdb8ff")
+    };
+}
+
+<section class="hero">
+    <div class="hero-grid">
+        <div>
+            <span class="kicker"><i></i> Equipo 6 · Grupo 5701</span>
+            <h1>Somos el <em>Equipo 6</em> y esto es Smart Academic Advisor.</h1>
+            <p class="lead">Un sistema que analiza el historial de cada alumno, calcula su afinidad con cada especialidad y le recomienda hacia dónde encaminar su carrera. Hecho con programación funcional en C# y consultas LINQ.</p>
+            <div class="hero-meta">
+                <span>Programación Lógica y Funcional</span><span>7.º semestre</span><span>TESE</span>
+            </div>
+        </div>
+        <div class="hero-panel">
+            <h3>Profesora</h3>
+            <div class="grande" style="font-size:24px;line-height:1.2">Alejandra González Sánchez</div>
+            <div class="peq">Ingeniería en Sistemas Computacionales</div>
+            <div class="mini-barras">
+                <div><label><span>Proyectos en la solución</span><span>4</span></label></div>
+                <div><label><span>Pruebas automáticas</span><span>24</span></label></div>
+                <div><label><span>Integrantes</span><span>5</span></label></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="tarjeta">
+    <h2>El equipo</h2>
+    <div class="equipo">
+        @foreach (var m in equipo)
+        {
+            <article class="persona">
+                <div class="avatar" style="background:@m.Color">@Fmt.Iniciales(m.Nombre)</div>
+                <div>
+                    <b>@m.Nombre</b>
+                    <span class="rol">@m.Rol</span>
+                    <p>@m.Detalle</p>
+                </div>
+            </article>
+        }
+    </div>
+</section>
+
+<section class="dos">
+    <div class="tarjeta">
+        <h2>Cómo está construido</h2>
+        <div class="capas">
+            <div class="capa"><b>SmartAdvisor.Core</b><span>Datos inmutables y lógica con funciones puras. No depende de nadie.</span></div>
+            <div class="capa"><b>SmartAdvisor.Functions</b><span>Azure Function: recibe la petición HTTP, llama al Core y responde JSON.</span></div>
+            <div class="capa"><b>SmartAdvisor.Web</b><span>Este sitio (ASP.NET Core MVC). Si Azure falla, calcula con el mismo Core.</span></div>
+            <div class="capa"><b>SmartAdvisor.Tests</b><span>Pruebas xUnit que comprueban los resultados esperados.</span></div>
+        </div>
+    </div>
+    <div class="tarjeta">
+        <h2>Qué puedes hacer aquí</h2>
+        <div class="capas">
+            <div class="capa"><b>Dashboard y Estadísticas</b><span>El panorama del grupo y lo que calcula LINQ.</span></div>
+            <div class="capa"><b>Portal del alumno</b><span>Cada alumno ve sus calificaciones, su avance y su recomendación.</span></div>
+            <div class="capa"><b>Portal del docente</b><span>Los docentes registran calificaciones y el análisis se recalcula solo.</span></div>
+            <div class="capa"><b>Administración</b><span>Alta, cambio y baja de alumnos, materias y especialidades.</span></div>
+        </div>
+    </div>
+</section>

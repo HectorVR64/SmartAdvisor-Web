@@ -1,0 +1,84 @@
+@model DashboardVm
+@{
+    ViewData["Title"] = "Dashboard";
+    var a = Model.Resultado.Analisis;
+    var r = a.Resumen;
+    var maxInteres = a.Intereses.Count == 0 ? 1 : a.Intereses.Max(i => i.Alumnos);
+}
+
+@{
+    var conRec = a.Alumnos.Count(x => x.Recomendacion.Estado == "recomendada");
+    var altos = a.Alumnos.Count(x => x.Promedio >= 85m);
+    var seguimiento = a.Alumnos.Count(x => x.Recomendacion.Estado != "recomendada");
+    decimal Porc(int n) => r.TotalAlumnos == 0 ? 0 : Math.Round(100m * n / r.TotalAlumnos, 0, MidpointRounding.AwayFromZero);
+    var avanceMedio = a.Alumnos.Count == 0 ? 0 : a.Alumnos.Average(x => x.AvancePct);
+}
+
+<section class="hero">
+    <div class="hero-grid">
+        <div>
+            <span class="kicker"><i></i> Dashboard · Parcial 2</span>
+            <h1>El asesor académico que <em>sí recomienda</em> con datos.</h1>
+            <p class="lead">Promedios por área, avance de créditos e intereses procesados con consultas LINQ para recomendar a cada alumno la especialidad donde más puede brillar.</p>
+            <div class="hero-meta">
+                <span>ASP.NET Core</span><span>Azure Functions</span><span>LINQ · C#</span><span>JSON</span><span>24 pruebas</span>
+            </div>
+            <div class="hero-meta">
+                <span>Procesado por: @Model.Resultado.Origen</span>
+                <span><a asp-action="Analisis" style="color:inherit">Ver JSON</a></span>
+            </div>
+        </div>
+        <div class="hero-panel">
+            <h3>Avance de créditos promedio</h3>
+            <div class="grande">@Fmt.Dec(avanceMedio)<small>%</small></div>
+            <div class="peq">del plan de estudios completado</div>
+            <div class="mini-barras">
+                <div><label><span>Con especialidad recomendada</span><span>@Porc(conRec)%</span></label><div class="pista"><i class="verde" style="width:@Fmt.Pct(Porc(conRec))%"></i></div></div>
+                <div><label><span>Promedio ≥ 85</span><span>@Porc(altos)%</span></label><div class="pista"><i style="width:@Fmt.Pct(Porc(altos))%"></i></div></div>
+                <div><label><span>Requieren seguimiento</span><span>@Porc(seguimiento)%</span></label><div class="pista"><i class="azul" style="width:@Fmt.Pct(Porc(seguimiento))%"></i></div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@if (Model.Resultado.Aviso is string aviso)
+{
+    <div class="aviso mal">@aviso</div>
+}
+
+<section class="kpis">
+    <div class="tarjeta kpi"><div class="icono" style="background:var(--verde-suave);color:var(--verde)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.2 3.4-5 6.5-5s5.7 1.8 6.5 5"/></svg></div><span>Total alumnos</span><b>@r.TotalAlumnos</b><small>@r.AlumnosActivos activos · Count()</small></div>
+    <div class="tarjeta kpi"><div class="icono" style="background:var(--azul-suave);color:var(--azul)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg></div><span>Total materias</span><b>@r.TotalMaterias</b><small>@r.CreditosPlan créditos en el plan · Sum()</small></div>
+    <div class="tarjeta kpi"><div class="icono" style="background:var(--ambar-suave);color:var(--ambar)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg></div><span>Total especialidades</span><b>@r.TotalEspecialidades</b><small>@r.TotalCursos cursos · @r.TotalCertificaciones certificaciones</small></div>
+    <div class="tarjeta kpi"><div class="icono" style="background:var(--rojo-suave);color:var(--rojo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.7 5.6 6.1.8-4.5 4.2 1.1 6L12 16.7 6.6 19.6l1.1-6L3.2 9.4l6.1-.8L12 3z"/></svg></div><span>Promedio general</span><b>@Fmt.Dec(r.PromedioGeneral)</b><small>mín. @Fmt.Dec(a.EstadisticaPromedios.Min) · máx. @Fmt.Dec(a.EstadisticaPromedios.Max) · Aggregate()</small></div>
+</section>
+
+<section class="tarjeta">
+    <h2>Recomendaciones por alumno <em>Select + Where + OrderByDescending</em></h2>
+    <table>
+        <thead><tr><th>Alumno</th><th class="num">Promedio</th><th>Avance de créditos</th><th>Recomendación</th><th class="num">Afinidad</th><th>Materias sugeridas</th></tr></thead>
+        <tbody>
+        @foreach (var al in a.Alumnos.OrderByDescending(x => x.Recomendacion.Afinidad).ThenBy(x => x.Nombre))
+        {
+            <tr>
+                <td><a asp-controller="Alumnos" asp-action="Detalle" asp-route-id="@al.AlumnoId">@al.Nombre</a></td>
+                <td class="num">@Fmt.Dec(al.Promedio)</td>
+                <td><div class="fila-barra mini"><div class="barra"><span class="azul" style="width:@Fmt.Pct(al.AvancePct)%"></span></div><b>@Fmt.Dec(al.AvancePct)%</b></div></td>
+                <td><span class="insignia @al.Recomendacion.Estado">@Fmt.Estado(al.Recomendacion.Estado)</span> @al.Recomendacion.Especialidad</td>
+                <td class="num">@Fmt.Dec(al.Recomendacion.Afinidad)</td>
+                <td>@(al.MateriasSugeridas.Count == 0 ? "—" : string.Join(", ", al.MateriasSugeridas.Select(m => m.Nombre)))</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</section>
+
+<section class="tarjeta">
+    <h2>Alumnos por estatus <em>GroupBy</em></h2>
+    <div class="chips">
+        @foreach (var e in a.PorEstatus)
+        {
+            <span class="chip chip-gris">@e.Estatus: <b>@e.Alumnos</b></span>
+        }
+    </div>
+</section>

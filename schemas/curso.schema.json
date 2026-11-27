@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smart-academic-advisor/schemas/curso.schema.json",
+  "title": "Cursos",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "nombre", "plataforma", "horas", "nivel", "area"],
+    "properties": {
+      "id": { "type": "string", "pattern": "^CUR-\\d{3}$" },
+      "nombre": { "type": "string", "minLength": 3 },
+      "plataforma": { "type": "string", "minLength": 2 },
+      "horas": { "type": "integer", "minimum": 1 },
+      "nivel": { "enum": ["basico", "intermedio", "avanzado"] },
+      "area": { "enum": ["IA", "Desarrollo", "Datos", "Redes", "Seguridad"] }
+    }
+  }
+}

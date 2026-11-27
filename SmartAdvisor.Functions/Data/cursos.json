@@ -1,0 +1,5 @@
+[
+  { "id": "CUR-001", "nombre": "Machine Learning con Python", "plataforma": "Coursera", "horas": 60, "nivel": "intermedio", "area": "IA" },
+  { "id": "CUR-002", "nombre": "ASP.NET Core desde cero", "plataforma": "Microsoft Learn", "horas": 20, "nivel": "basico", "area": "Desarrollo" },
+  { "id": "CUR-003", "nombre": "SQL y análisis de datos", "plataforma": "Udemy", "horas": 30, "nivel": "intermedio", "area": "Datos" }
+]

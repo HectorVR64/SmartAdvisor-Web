@@ -1,0 +1,32 @@
+@model AlumnoForm
+@{
+    ViewData["Title"] = Model.Editando ? "Editar alumno" : "Nuevo alumno";
+}
+
+<div class="encabezado"><h1>@ViewData["Title"]</h1></div>
+
+<form method="post" class="tarjeta formulario" asp-action="@(Model.Editando ? "Editar" : "Crear")" asp-route-id="@(Model.Editando ? Model.Id : null)">
+    <div asp-validation-summary="ModelOnly" class="aviso mal"></div>
+    <div class="rejilla">
+        <label>Matrícula<input type="text" name="Matricula" value="@Model.Matricula" required /></label>
+        <label>Nombre completo<input type="text" name="Nombre" value="@Model.Nombre" required /></label>
+        <label>Semestre (1 a 9)<input type="number" name="Semestre" value="@Model.Semestre" min="1" max="9" required /></label>
+        <label>Promedio (0 a 100)<input type="number" name="Promedio" value="@Fmt.Dec(Model.Promedio)" min="0" max="100" step="0.1" required /></label>
+        <label>Estatus
+            <select name="Estatus">
+                @foreach (var e in Consultas.EstatusAlumno) { <option value="@e" selected="@(Model.Estatus == e)">@e</option> }
+            </select>
+        </label>
+    </div>
+    <fieldset>
+        <legend>Intereses</legend>
+        @foreach (var i in Consultas.Areas)
+        {
+            <label class="check"><input type="checkbox" name="Intereses" value="@i" checked="@Model.Intereses.Contains(i)" /> @i</label>
+        }
+    </fieldset>
+    <div class="botonera">
+        <button type="submit" class="boton">Guardar</button>
+        <a class="boton sec" asp-action="Index">Cancelar</a>
+    </div>
+</form>

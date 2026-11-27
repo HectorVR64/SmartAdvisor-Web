@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smart-academic-advisor/schemas/docente.schema.json",
+  "title": "Docentes",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "nombre", "materiasIds"],
+    "properties": {
+      "id": { "type": "string", "pattern": "^DOC-\\d{3}$" },
+      "nombre": { "type": "string", "minLength": 3 },
+      "materiasIds": { "type": "array", "items": { "type": "string", "pattern": "^MAT-\\d{3}$" } }
+    }
+  }
+}

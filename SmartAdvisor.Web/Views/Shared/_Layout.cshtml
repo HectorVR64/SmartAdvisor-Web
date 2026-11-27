@@ -1,0 +1,61 @@
+@{
+    var controlador = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    var accion = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+    // Activo("Home", "Index"): marca la sección actual (la acción solo se compara cuando se indica).
+    string Activo(string c, string? a = null) =>
+        string.Equals(controlador, c, StringComparison.OrdinalIgnoreCase)
+        && (a is null || string.Equals(accion, a, StringComparison.OrdinalIgnoreCase)) ? "activo" : "";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>@ViewData["Title"] - Smart Academic Advisor</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="app">
+        <aside class="lateral">
+            <div class="marca">
+                <i>SA</i>
+                <div>Smart Academic<br />Advisor<small>Equipo 6 · TESE</small></div>
+            </div>
+            <div class="nav-etq">Sistema</div>
+            <nav aria-label="Sistema">
+                <a class="@Activo("Home", "Index")" asp-controller="Home" asp-action="Index"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Dashboard</a>
+                <a class="@Activo("Home", "Estadisticas")" asp-controller="Home" asp-action="Estadisticas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Estadísticas</a>
+                <a class="@Activo("Alumnos")" asp-controller="Alumnos" asp-action="Index"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.2 3.4-5 6.5-5s5.7 1.8 6.5 5M16 4.6a3.5 3.5 0 0 1 0 6.8M17.5 15.3c2 .6 3.5 2.1 4 4.7"/></svg>Alumnos</a>
+                <a class="@Activo("Materias")" asp-controller="Materias" asp-action="Index"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>Materias</a>
+                <a class="@Activo("Especialidades")" asp-controller="Especialidades" asp-action="Index"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg>Especialidades</a>
+            </nav>
+            <div class="nav-etq">Portales</div>
+            <nav aria-label="Portales">
+                <a class="@Activo("PortalAlumno")" asp-controller="PortalAlumno" asp-action="Index"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 9l10-5 10 5-10 5L2 9z"/><path d="M6 11.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-4.5"/></svg>Portal del alumno</a>
+                <a class="@Activo("PortalDocente")" asp-controller="PortalDocente" asp-action="Index"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Portal del docente</a>
+            </nav>
+            <div class="nav-etq">Equipo</div>
+            <nav aria-label="Equipo">
+                <a class="@Activo("Nosotros")" asp-controller="Nosotros" asp-action="Index"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/></svg>Nosotros</a>
+            </nav>
+            <div class="estado-lateral">
+                <b>Grupo 5701</b>
+                <span>Programación Lógica y Funcional<br />Núcleo funcional · Parcial 2</span>
+            </div>
+        </aside>
+        <main class="contenido">
+            @if (TempData["Mensaje"] is string ok)
+            {
+                <div class="aviso ok">@ok</div>
+            }
+            @if (TempData["Error"] is string mal)
+            {
+                <div class="aviso mal">@mal</div>
+            }
+            @RenderBody()
+        </main>
+    </div>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>

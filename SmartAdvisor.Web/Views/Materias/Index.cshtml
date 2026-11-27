@@ -1,0 +1,52 @@
+@model MateriasIndexVm
+@{
+    ViewData["Title"] = "Materias";
+}
+
+<div class="encabezado">
+    <h1>Materias</h1>
+    <div class="meta">
+        <span class="chip chip-gris">@Model.Materias.Count de @Model.Total materias · @Model.CreditosPlan créditos</span>
+        <a class="boton" asp-action="Crear">+ Nueva materia</a>
+    </div>
+</div>
+
+<form method="get" class="filtros tarjeta">
+    <label>Buscar<input type="text" name="texto" value="@Model.Texto" placeholder="Nombre o clave" /></label>
+    <label>Área
+        <select name="area">
+            <option value="">Todas</option>
+            @foreach (var i in Consultas.Areas) { <option value="@i" selected="@(Model.Area == i)">@i</option> }
+        </select>
+    </label>
+    <button type="submit" class="boton">Filtrar</button>
+    <a href="@Url.Action("Index")" class="boton sec">Limpiar</a>
+    <em class="linq">Where + OrderBy</em>
+</form>
+
+<section class="tarjeta">
+    <table>
+        <thead><tr><th>Clave</th><th>Materia</th><th>Área</th><th class="num">Sem.</th><th class="num">Créditos</th><th>Tipo</th><th>Prerrequisitos</th><th></th></tr></thead>
+        <tbody>
+        @foreach (var m in Model.Materias)
+        {
+            <tr>
+                <td>@m.Clave</td>
+                <td>@m.Nombre</td>
+                <td><span class="chip">@m.Area</span></td>
+                <td class="num">@m.Semestre</td>
+                <td class="num">@m.Creditos</td>
+                <td>@m.Tipo</td>
+                <td>@(m.Prerrequisitos.Count == 0 ? "—" : string.Join(", ", m.Prerrequisitos))</td>
+                <td class="acciones">
+                    <a class="boton sec peq" asp-action="Editar" asp-route-id="@m.Id">Editar</a>
+                    <form method="post" asp-action="Eliminar" asp-route-id="@m.Id" onsubmit="return confirm('¿Eliminar esta materia?');">
+                        <button type="submit" class="boton peligro peq">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    @if (Model.Materias.Count == 0) { <p class="vacio">No hay materias con esos filtros.</p> }
+</section>

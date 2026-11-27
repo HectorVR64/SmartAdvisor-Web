@@ -1,0 +1,45 @@
+{
+  "descripcion": "Base de REGLAS (cláusulas de Horn): cabeza :- cuerpo. Mayúscula = variable. Operadores: >= <= > < = != y not(Meta).",
+  "reglas": [
+    {
+      "id": "EspecialidadIA",
+      "descripcion": "Se recomienda IA si el promedio es de 85 o más y el alumno tiene interés en IA.",
+      "regla": "recomienda(A, esp_ia) :- alumno(A), promedio(A, P), P >= 85, interes(A, ia)"
+    },
+    {
+      "id": "EspecialidadDesarrollo",
+      "descripcion": "Se recomienda Desarrollo de Software con promedio de 75 o más e interés en Desarrollo.",
+      "regla": "recomienda(A, esp_des) :- alumno(A), promedio(A, P), P >= 75, interes(A, desarrollo)"
+    },
+    {
+      "id": "EspecialidadDatos",
+      "descripcion": "Se recomienda Ciencia de Datos con promedio de 80 o más e interés en Datos.",
+      "regla": "recomienda(A, esp_dat) :- alumno(A), promedio(A, P), P >= 80, interes(A, datos)"
+    },
+    {
+      "id": "Condicionada",
+      "descripcion": "Una especialidad queda condicionada si coincide con un interés del alumno pero ninguna regla la recomienda todavía.",
+      "regla": "condicionada(A, E) :- alumno(A), area_clave(E, Ar), interes(A, Ar), not(recomienda(A, E))"
+    },
+    {
+      "id": "FaltaPrerrequisito",
+      "descripcion": "A le falta un prerrequisito de M si existe un prerrequisito P de M que A no ha aprobado.",
+      "regla": "falta_prerrequisito(A, M) :- prerrequisito(M, P), not(aprobada(A, P))"
+    },
+    {
+      "id": "ObjetivoRecomendada",
+      "descripcion": "La especialidad objetivo del alumno es una que se le recomienda.",
+      "regla": "objetivo(A, E) :- recomienda(A, E)"
+    },
+    {
+      "id": "ObjetivoCondicionada",
+      "descripcion": "Si no se le recomienda ninguna, la especialidad objetivo es una condicionada (por la que muestra interés).",
+      "regla": "objetivo(A, E) :- condicionada(A, E)"
+    },
+    {
+      "id": "MateriaSugerida",
+      "descripcion": "Se sugiere la materia M si pertenece a una especialidad objetivo, no está aprobada ni en curso y no falta ningún prerrequisito.",
+      "regla": "sugerida(A, M) :- objetivo(A, E), materia_de(E, M), not(aprobada(A, M)), not(cursando(A, M)), not(falta_prerrequisito(A, M))"
+    }
+  ]
+}

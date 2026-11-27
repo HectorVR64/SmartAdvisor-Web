@@ -1,0 +1,104 @@
+@model PortalAlumnoVm
+@{
+    var a = Model.Analisis;
+    var rec = a.Recomendacion;
+    ViewData["Title"] = "Portal del alumno";
+    var maxAfinidad = rec.Ranking.Count == 0 ? 1 : Math.Max(100m, rec.Ranking.Max(x => x.Afinidad));
+    var conNota = Model.Calificaciones.Where(c => c.Registro.Calificacion.HasValue).ToList();
+}
+
+<div class="encabezado">
+    <div class="persona-cab">
+        <div class="avatar grande">@Fmt.Iniciales(a.Nombre)</div>
+        <div>
+            <h1>Hola, @a.Nombre.Split(' ')[0]</h1>
+            <p class="sub">@a.Matricula · semestre @a.Semestre · @a.Estatus · intereses: @string.Join(", ", a.Intereses)</p>
+        </div>
+    </div>
+    <div class="meta">
+        <a class="boton sec" asp-action="Salir">Cambiar de alumno</a>
+    </div>
+</div>
+
+<section class="kpis">
+    <div class="tarjeta kpi"><div class="icono" style="background:var(--verde-suave);color:var(--verde)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.7 5.6 6.1.8-4.5 4.2 1.1 6L12 16.7 6.6 19.6l1.1-6L3.2 9.4l6.1-.8L12 3z"/></svg></div><span>Mi promedio</span><b>@Fmt.Dec(a.Promedio)</b><small>promedio general</small></div>
+    <div class="tarjeta kpi"><div class="icono" style="background:var(--azul-suave);color:var(--azul)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5M4 15c3-2 5-2 8 0s5 2 8 0V5c-3 2-5 2-8 0S7 3 4 5"/></svg></div><span>Avance del plan</span><b>@Fmt.Dec(a.AvancePct)%</b><small>@a.CreditosAprobados de @a.CreditosPlan créditos</small></div>
+    <div class="tarjeta kpi"><div class="icono" style="background:var(--ambar-suave);color:var(--ambar)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13z"/></svg></div><span>Materias aprobadas</span><b>@a.MateriasAprobadas</b><small>con calificación registrada</small></div>
+    <div class="tarjeta kpi"><div class="icono" style="background:var(--rojo-suave);color:var(--rojo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><span>En curso</span><b>@a.MateriasCursando</b><small>sin calificación todavía</small></div>
+</section>
+
+<section class="tarjeta">
+    <h2>Mis calificaciones <em>Where + Join + OrderBy</em></h2>
+    @if (Model.Calificaciones.Count == 0)
+    {
+        <p class="vacio">Todavía no tienes materias registradas.</p>
+    }
+    else
+    {
+        <table>
+            <thead><tr><th>Periodo</th><th>Materia</th><th>Docente</th><th class="num">Calificación</th><th>Estatus</th></tr></thead>
+            <tbody>
+            @foreach (var c in Model.Calificaciones)
+            {
+                <tr>
+                    <td>@c.Registro.Periodo</td>
+                    <td><b>@c.Materia</b><br /><small class="nota">@c.Area</small></td>
+                    <td>@c.Docente</td>
+                    <td class="num">@if (c.Registro.Calificacion.HasValue) { <span class="nota-chip @Fmt.ClaseNota(c.Registro.Calificacion)">@c.Registro.Calificacion.Value.ToString("0.#")</span> } else { <span class="nota-chip nota-na">—</span> }</td>
+                    <td><span class="insignia est-@c.Registro.Estatus">@c.Registro.Estatus</span></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+</section>
+
+<section class="dos">
+    <div class="tarjeta">
+        <h2>Mi recomendación de especialidad</h2>
+        <p><span class="insignia @rec.Estado">@Fmt.Estado(rec.Estado)</span> <b>@(rec.Especialidad ?? "—")</b> · afinidad @Fmt.Dec(rec.Afinidad)</p>
+        <p class="nota">@rec.Motivo</p>
+        @foreach (var r in rec.Ranking)
+        {
+            <div class="fila-barra ancho">
+                <span class="etq largo">@r.Nombre</span>
+                <div class="barra"><span class="@(r.CumpleRegla ? "verde" : "")" style="width:@Fmt.Ancho(r.Afinidad, maxAfinidad)%"></span></div>
+                <b>@Fmt.Dec(r.Afinidad)</b>
+            </div>
+        }
+        <p class="pie">Se recalcula sola cuando tu docente registra una calificación.</p>
+    </div>
+
+    <div class="tarjeta">
+        <h2>Mi avance por área <em>Join + GroupBy</em></h2>
+        @foreach (var i in a.PorArea)
+        {
+            <div class="fila-barra">
+                <span class="etq">@i.Area</span>
+                <div class="barra"><span class="azul" style="width:@Fmt.Pct(i.AvancePct)%"></span></div>
+                <b>@i.Aprobadas/@i.MateriasPlan</b>
+                <small class="nota">promedio del área: @Fmt.Dec(i.Promedio)</small>
+            </div>
+        }
+    </div>
+</section>
+
+<section class="tarjeta">
+    <h2>Materias que me sugiere el sistema <em>Where + All(prerrequisitos)</em></h2>
+    @if (a.MateriasSugeridas.Count == 0)
+    {
+        <p class="vacio">Por ahora no hay materias sugeridas.</p>
+    }
+    else
+    {
+        <table>
+            <thead><tr><th>Materia</th><th>Área</th><th class="num">Sem.</th><th>Por qué</th></tr></thead>
+            <tbody>
+            @foreach (var m in a.MateriasSugeridas)
+            {
+                <tr><td>@m.Nombre</td><td>@m.Area</td><td class="num">@m.Semestre</td><td>@m.Motivo</td></tr>
+            }
+            </tbody>
+        </table>
+    }
+</section>

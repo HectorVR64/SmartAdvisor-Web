@@ -1,0 +1,5 @@
+[
+  { "id": "DOC-001", "nombre": "Dra. Laura Medina Ortega", "materiasIds": ["MAT-301", "MAT-302", "MAT-401", "MAT-402"] },
+  { "id": "DOC-002", "nombre": "Mtro. Carlos Ibarra Solís", "materiasIds": ["MAT-101", "MAT-110", "MAT-340"] },
+  { "id": "DOC-003", "nombre": "Mtra. Patricia Núñez Vega", "materiasIds": ["MAT-205", "MAT-220", "MAT-330"] }
+]

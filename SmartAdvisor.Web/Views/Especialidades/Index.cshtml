@@ -1,0 +1,39 @@
+@model EspecialidadesIndexVm
+@{
+    ViewData["Title"] = "Especialidades";
+    var d = Model.Datos;
+}
+
+<div class="encabezado">
+    <h1>Especialidades</h1>
+    <div class="meta">
+        <span class="chip @(Model.Resultado.Origen == "Azure Function" ? "chip-ok" : "chip-gris")">Procesado por: @Model.Resultado.Origen</span>
+        <a class="boton" asp-action="Crear">+ Nueva especialidad</a>
+    </div>
+</div>
+
+<section class="tarjetas">
+@foreach (var e in d.Especialidades.OrderBy(x => x.Nombre))
+{
+    var res = Model.Resumen.FirstOrDefault(r => r.EspecialidadId == e.Id);
+    <article class="tarjeta esp">
+        <h2>@e.Nombre</h2>
+        <p>@e.Descripcion</p>
+        <p class="nota">Promedio mínimo: <b>@e.PromedioMinimo.ToString("0.#")</b> · Áreas clave: @string.Join(", ", e.AreasClave)</p>
+        <div class="chips">
+            <span class="chip chip-gris">@(res?.AlumnosInteresados ?? 0) interesados</span>
+            <span class="chip chip-ok">@(res?.Recomendados ?? 0) recomendados</span>
+            <span class="chip chip-aviso">@(res?.Condicionados ?? 0) condicionados</span>
+        </div>
+        <p class="pie"><b>Materias:</b> @string.Join(", ", d.Materias.Where(m => e.MateriasIds.Contains(m.Id)).OrderBy(m => m.Semestre).Select(m => m.Nombre))</p>
+        <p class="pie"><b>Certificaciones:</b> @(e.CertificacionesIds.Count == 0 ? "—" : string.Join(", ", d.Certificaciones.Where(c => e.CertificacionesIds.Contains(c.Id)).Select(c => c.Nombre)))</p>
+        <p class="pie"><b>Cursos:</b> @(e.CursosIds.Count == 0 ? "—" : string.Join(", ", d.Cursos.Where(c => e.CursosIds.Contains(c.Id)).Select(c => c.Nombre)))</p>
+        <div class="acciones">
+            <a class="boton sec peq" asp-action="Editar" asp-route-id="@e.Id">Editar</a>
+            <form method="post" asp-action="Eliminar" asp-route-id="@e.Id" onsubmit="return confirm('¿Eliminar esta especialidad?');">
+                <button type="submit" class="boton peligro peq">Eliminar</button>
+            </form>
+        </div>
+    </article>
+}
+</section>

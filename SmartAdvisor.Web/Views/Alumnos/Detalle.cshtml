@@ -1,0 +1,128 @@
+@model DetalleAlumnoVm
+@{
+    var a = Model.Analisis;
+    var rec = a.Recomendacion;
+    ViewData["Title"] = a.Nombre;
+    var maxAfinidad = rec.Ranking.Count == 0 ? 1 : Math.Max(100m, rec.Ranking.Max(x => x.Afinidad));
+}
+
+<div class="encabezado">
+    <div>
+        <h1>@a.Nombre</h1>
+        <p class="sub">@a.Matricula · semestre @a.Semestre · @a.Estatus · @string.Join(", ", a.Intereses)</p>
+    </div>
+    <div class="meta">
+        <a class="boton sec" asp-action="Index">← Alumnos</a>
+        <a class="boton sec" asp-action="Editar" asp-route-id="@a.AlumnoId">Editar</a>
+    </div>
+</div>
+
+<section class="kpis">
+    <div class="tarjeta kpi"><span>Promedio</span><b>@Fmt.Dec(a.Promedio)</b><small>promedio general</small></div>
+    <div class="tarjeta kpi"><span>Avance del plan</span><b>@Fmt.Dec(a.AvancePct)%</b><small>@a.CreditosAprobados de @a.CreditosPlan créditos · Aggregate()</small></div>
+    <div class="tarjeta kpi"><span>Materias aprobadas</span><b>@a.MateriasAprobadas</b><small>Where(estatus = aprobada)</small></div>
+    <div class="tarjeta kpi"><span>En curso</span><b>@a.MateriasCursando</b><small>sin calificación todavía</small></div>
+</section>
+
+<section class="dos">
+    <div class="tarjeta">
+        <h2>Recomendación de especialidad</h2>
+        <p><span class="insignia @rec.Estado">@Fmt.Estado(rec.Estado)</span> <b>@(rec.Especialidad ?? "—")</b> · afinidad @Fmt.Dec(rec.Afinidad)</p>
+        <p class="nota">@rec.Motivo</p>
+        @foreach (var r in rec.Ranking)
+        {
+            <div class="fila-barra ancho">
+                <span class="etq largo">@r.Nombre</span>
+                <div class="barra"><span class="@(r.CumpleRegla ? "verde" : "")" style="width:@Fmt.Ancho(r.Afinidad, maxAfinidad)%"></span></div>
+                <b>@Fmt.Dec(r.Afinidad)</b>
+            </div>
+        }
+        <p class="pie">Afinidad = 100 × (0.40·intereses + 0.35·historial del área + 0.25·promedio). Verde: cumple la regla.</p>
+    </div>
+
+    <div class="tarjeta">
+        <h2>Promedio y avance por área <em>Join + GroupBy</em></h2>
+        @foreach (var i in a.PorArea)
+        {
+            <div class="fila-barra">
+                <span class="etq">@i.Area</span>
+                <div class="barra"><span class="azul" style="width:@Fmt.Pct(i.AvancePct)%"></span></div>
+                <b>@i.Aprobadas/@i.MateriasPlan</b>
+                <small class="nota">prom. @Fmt.Dec(i.Promedio)</small>
+            </div>
+        }
+    </div>
+</section>
+
+<section class="dos">
+    <div class="tarjeta">
+        <h2>Materias sugeridas <em>Where + All(prerrequisitos)</em></h2>
+        @if (a.MateriasSugeridas.Count == 0)
+        {
+            <p class="vacio">No hay materias sugeridas por ahora.</p>
+        }
+        else
+        {
+            <table>
+                <thead><tr><th>Materia</th><th>Área</th><th class="num">Sem.</th><th>Por qué</th></tr></thead>
+                <tbody>
+                @foreach (var m in a.MateriasSugeridas)
+                {
+                    <tr><td>@m.Nombre</td><td>@m.Area</td><td class="num">@m.Semestre</td><td>@m.Motivo</td></tr>
+                }
+                </tbody>
+            </table>
+        }
+        @if (a.Certificaciones.Count > 0 || a.Cursos.Count > 0)
+        {
+            <p class="pie"><b>Certificaciones:</b> @string.Join(", ", a.Certificaciones)<br /><b>Cursos:</b> @string.Join(", ", a.Cursos)</p>
+        }
+    </div>
+
+    <div class="tarjeta">
+        <h2>Registrar materia en el historial</h2>
+        <form method="post" asp-action="AgregarHistorial" class="formulario compacto">
+            <input type="hidden" name="AlumnoId" value="@a.AlumnoId" />
+            <label>Materia
+                <select name="MateriaId">
+                    @foreach (var m in Model.Materias.OrderBy(m => m.Semestre).ThenBy(m => m.Nombre)) { <option value="@m.Id">@m.Clave · @m.Nombre</option> }
+                </select>
+            </label>
+            <label>Periodo (AAAA-1 o AAAA-2)<input type="text" name="Periodo" value="@Model.Form.Periodo" pattern="\d{4}-[12]" required /></label>
+            <label>Estatus
+                <select name="Estatus">
+                    @foreach (var e in Consultas.EstatusHistorial) { <option value="@e">@e</option> }
+                </select>
+            </label>
+            <label>Calificación (vacía si está cursando)<input type="number" name="Calificacion" min="0" max="100" step="1" /></label>
+            <button type="submit" class="boton">Agregar</button>
+        </form>
+    </div>
+</section>
+
+<section class="tarjeta">
+    <h2>Historial académico <em>Where + Join + OrderBy</em></h2>
+    <table>
+        <thead><tr><th>Periodo</th><th>Materia</th><th>Área</th><th class="num">Calificación</th><th>Estatus</th><th></th></tr></thead>
+        <tbody>
+        @foreach (var h in Model.Historial)
+        {
+            <tr>
+                <td>@h.Registro.Periodo</td>
+                <td>@h.Materia</td>
+                <td>@h.Area</td>
+                <td class="num">@(h.Registro.Calificacion.HasValue ? h.Registro.Calificacion.Value.ToString("0.##") : "—")</td>
+                <td>@h.Registro.Estatus</td>
+                <td class="acciones">
+                    <form method="post" asp-action="QuitarHistorial" onsubmit="return confirm('¿Quitar este registro?');">
+                        <input type="hidden" name="alumnoId" value="@a.AlumnoId" />
+                        <input type="hidden" name="historialId" value="@h.Registro.Id" />
+                        <button type="submit" class="boton peligro peq">Quitar</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    @if (Model.Historial.Count == 0) { <p class="vacio">Este alumno aún no tiene historial.</p> }
+</section>

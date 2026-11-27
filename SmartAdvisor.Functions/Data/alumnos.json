@@ -1,0 +1,38 @@
+[
+  {
+    "id": "ALU-001",
+    "matricula": "202410001",
+    "nombre": "Ana Torres Ramírez",
+    "semestre": 6,
+    "promedio": 95.0,
+    "intereses": ["IA"],
+    "estatus": "activo"
+  },
+  {
+    "id": "ALU-002",
+    "matricula": "202410002",
+    "nombre": "Luis Mendoza Cruz",
+    "semestre": 5,
+    "promedio": 82.5,
+    "intereses": ["Desarrollo", "Datos"],
+    "estatus": "activo"
+  },
+  {
+    "id": "ALU-003",
+    "matricula": "202310003",
+    "nombre": "Sofía Ramírez León",
+    "semestre": 7,
+    "promedio": 78.0,
+    "intereses": ["Datos"],
+    "estatus": "activo"
+  },
+  {
+    "id": "ALU-004",
+    "matricula": "202510004",
+    "nombre": "Diego Herrera Soto",
+    "semestre": 4,
+    "promedio": 70.5,
+    "intereses": ["Redes", "Seguridad"],
+    "estatus": "activo"
+  }
+]
