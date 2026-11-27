@@ -1,8 +1,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY . .
-RUN dotnet restore "SmartAdvisor.Web.csproj"
-RUN dotnet publish "SmartAdvisor.Web.csproj" -c Release -o /app/publish
+RUN dotnet restore "SmartAdvisor.Web/SmartAdvisor.Web.csproj"
+RUN dotnet publish "SmartAdvisor.Web/SmartAdvisor.Web.csproj" -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
